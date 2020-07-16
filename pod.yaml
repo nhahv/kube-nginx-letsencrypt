@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: letsencrypt
+  name: letsencrypt
+  labels:
+    app: letsencrypt
+spec:
+  containers:
+    # Bash script that starts an http server and launches certbot
+    # Fork of github.com/sjenning/kube-nginx-letsencrypt
+    - image: nhahv/kube-nginx-letsencrypt:latest
+      name: letsencrypt
+      imagePullPolicy: Always
+      ports:
+        - name: letsencrypt
+          containerPort: 80
+      env:
+        - name: DOMAINS
+          value: example.com
+        - name: EMAIL
+          value: owner@gmail.com
+        - name: SECRET
+          value: docs-letsencrypt-certs
+        - name: DEPLOYMENT
+          value: nginx
